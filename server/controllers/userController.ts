@@ -27,12 +27,16 @@ const validEmail = (email: string): boolean => {
 };
 
 const getAllUsers = async (): Promise<Model<any, any>[]> =>
-	await user.findAll({ include: ["songs", "followedBy", "following"] });
+	await user.findAll({
+		include: ["songs", "followedBy", "following", "createdPlaylists"],
+	});
 
 const getUserById = async (
 	id: number
 ): Promise<Model<any, any> | undefined | null> =>
-	await user.findByPk(id, { include: ["songs", "followedBy", "following"] });
+	await user.findByPk(id, {
+		include: ["songs", "followedBy", "following", "createdPlaylists"],
+	});
 
 const createUser = async (
 	username: string,

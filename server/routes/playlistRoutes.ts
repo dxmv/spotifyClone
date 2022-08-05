@@ -1,4 +1,5 @@
 import { Router } from "express";
+import passport from "passport";
 import playlistController from "../controllers/playlistController";
 
 export const route = Router();
@@ -26,18 +27,23 @@ route.get("/:id", async (req, res) => {
 });
 
 // Create playlist
-route.post("/", async (req, res) => {
-	try {
-		const playlist = await playlistController.createPlaylist(
-			req.body.name,
-			req.body.description
-		);
-		res.status(200).json(playlist);
-	} catch (e) {
-		const message = (e as Error).message;
-		res.status(400).json(message);
+route.post(
+	"/",
+	passport.authenticate("jwt", { session: false }),
+	async (req, res) => {
+		try {
+			const playlist = await playlistController.createPlaylist(
+				req.body.name,
+				req.body.description,
+				req.user.dataValues.userId
+			);
+			res.status(200).json(playlist);
+		} catch (e) {
+			const message = (e as Error).message;
+			res.status(400).json(message);
+		}
 	}
-});
+);
 
 // Add songs to playlist
 route.patch("/:id", async (req, res) => {

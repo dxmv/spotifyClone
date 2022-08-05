@@ -10,6 +10,10 @@ const relations = () => {
 	});
 	song.belongsTo(user, { foreignKey: "userId", as: "user" });
 
+	// User => Playlist
+	user.hasMany(playlist, { foreignKey: "creatorId", as: "createdPlaylists" });
+	playlist.belongsTo(user, { foreignKey: "creatorId", as: "creator" });
+
 	// User => Follow <= User
 	user.belongsToMany(user, {
 		as: "followedBy",

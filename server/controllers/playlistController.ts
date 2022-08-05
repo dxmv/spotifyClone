@@ -2,16 +2,24 @@ import playlist, { playlistSongs } from "../models/playlist";
 import song from "../models/song";
 
 const getAllPlaylists = async () =>
-	await playlist.findAll({ include: "songs" });
+	await playlist.findAll({ include: ["songs", "creator"] });
 
 const getPlaylistById = async (id: string) =>
-	await playlist.findByPk(id, { include: "songs" });
+	await playlist.findByPk(id, { include: ["songs", "creator"] });
 
-const createPlaylist = async (name: string, description: string) => {
+const createPlaylist = async (
+	name: string,
+	description: string,
+	userId: number
+) => {
 	if (!playlist.findOne({ where: { name: name } })) {
 		throw new Error(`Playlist with name \'${name}\' already exists`);
 	}
-	return await playlist.create({ name: name, description: description });
+	return await playlist.create({
+		name: name,
+		description: description,
+		creatorId: userId,
+	});
 };
 
 const addSong = async (playlistId: string, songId: string) => {
