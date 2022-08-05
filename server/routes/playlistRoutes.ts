@@ -65,7 +65,7 @@ route.patch("/removeSong/:id", async (req, res) => {
 route.delete("/:id", async (req, res) => {
 	try {
 		await playlistController.deletePlaylist(req.params.id);
-		res.status(202).json("Successfully deleted");
+		res.status(200).json("Successfully deleted");
 	} catch (e) {
 		const message = (e as Error).message;
 		res.status(400).json(message);

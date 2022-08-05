@@ -2,6 +2,7 @@ import { Router } from "express";
 import userController from "../controllers/userController";
 import multer from "multer";
 import { userStorage } from "../utils/multerStorage";
+import passport from "passport";
 
 export const route = Router();
 
@@ -133,15 +134,20 @@ route.patch("/makeAuthor/:id", async (req, res) => {
 });
 
 // Follow another user
-route.patch("/follow/:id", async (req, res) => {
-	try {
-		if (req.params.id === "1") {
-			res.status(404).json("You cannot follow yourself");
+route.patch(
+	"/follow/:id",
+	passport.authenticate("jwt", { session: false }),
+	async (req, res) => {
+		try {
+			console.log(req.user);
+			if (req.params.id === req.user) {
+				res.status(404).json("You cannot follow yourself");
+			}
+			const user = await userController.followUser("1", req.params.id);
+			res.status(202).json(user);
+		} catch (e) {
+			let message = (e as Error).message;
+			res.status(400).json(message);
 		}
-		const user = await userController.followUser("1", req.params.id);
-		res.status(202).json(user);
-	} catch (e) {
-		let message = (e as Error).message;
-		res.status(400).json(message);
 	}
-});
+);
