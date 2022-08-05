@@ -40,4 +40,10 @@ const user = db.define(
 
 export const follow = db.define("Follow", {}, { timestamps: false });
 
+export const favoritePlaylists = db.define(
+	"FavoritePlaylists",
+	{},
+	{ timestamps: false }
+);
+
 export default user;

@@ -1,5 +1,5 @@
 import { Model } from "sequelize";
-import user, { follow } from "../models/user";
+import user, { follow, favoritePlaylists } from "../models/user";
 import bcrypt from "bcrypt";
 import fsPromises from "fs/promises";
 
@@ -28,14 +28,26 @@ const validEmail = (email: string): boolean => {
 
 const getAllUsers = async (): Promise<Model<any, any>[]> =>
 	await user.findAll({
-		include: ["songs", "followedBy", "following", "createdPlaylists"],
+		include: [
+			"songs",
+			"followedBy",
+			"following",
+			"createdPlaylists",
+			"favoritePlaylists",
+		],
 	});
 
 const getUserById = async (
 	id: number
 ): Promise<Model<any, any> | undefined | null> =>
 	await user.findByPk(id, {
-		include: ["songs", "followedBy", "following", "createdPlaylists"],
+		include: [
+			"songs",
+			"followedBy",
+			"following",
+			"createdPlaylists",
+			"favoritePlaylists",
+		],
 	});
 
 const createUser = async (
@@ -120,6 +132,18 @@ const changeUser = async (id: number, username: string, email: string) => {
 	return await getUserById(id);
 };
 
+const addFavoritePlaylist = async (userId: number, playlistId: number) => {
+	favoritePlaylists.create({ userId: userId, playlistId: playlistId });
+	return await getUserById(userId);
+};
+
+const removeFavoritePlaylist = async (userId: number, playlistId: number) => {
+	favoritePlaylists.destroy({
+		where: { userId: userId, playlistId: playlistId },
+	});
+	return await getUserById(userId);
+};
+
 export default {
 	getAllUsers,
 	getUserById,
@@ -129,4 +153,6 @@ export default {
 	followUser,
 	changePicture,
 	changeUser,
+	addFavoritePlaylist,
+	removeFavoritePlaylist,
 };
