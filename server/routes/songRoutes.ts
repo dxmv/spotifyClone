@@ -2,6 +2,7 @@ import { Router } from "express";
 import songController from "../controllers/songController";
 import multer from "multer";
 import { songImageStorage, songStorage } from "../utils/multerStorage";
+import passport from "passport";
 
 export const route = Router();
 const uploadImage = multer({
@@ -64,19 +65,24 @@ route.get("/:id", async (req, res) => {
 });
 
 // Create a song
-route.post("/", uploadSong.single("song"), async (req, res) => {
-	try {
-		const song = await songController.createSong(
-			req.file?.filename,
-			req.body.name,
-			"1"
-		);
-		res.status(202).json(song);
-	} catch (e) {
-		const message = (e as Error).message;
-		res.status(400).json(message);
+route.post(
+	"/",
+	uploadSong.single("song"),
+	passport.authenticate("jwt", { session: false }),
+	async (req, res) => {
+		try {
+			const song = await songController.createSong(
+				req.file?.filename,
+				req.body.name,
+				req.user.dataValues.userId
+			);
+			res.status(202).json(song);
+		} catch (e) {
+			const message = (e as Error).message;
+			res.status(400).json(message);
+		}
 	}
-});
+);
 
 // Add image to song
 route.post(
@@ -86,7 +92,8 @@ route.post(
 		try {
 			const song = await songController.addImageToSong(
 				req.params.id,
-				req.file?.filename
+				req.file?.filename,
+				req.user.dataValues.userId
 			);
 			res.status(202).json(song);
 		} catch (e) {
@@ -97,15 +104,20 @@ route.post(
 );
 
 // Change name
-route.patch("/changeName/:id", async (req, res) => {
-	try {
-		const song = await songController.changeSongName(
-			req.params.id,
-			req.body.name
-		);
-		res.status(202).json(song);
-	} catch (e) {
-		const message = (e as Error).message;
-		res.status(400).json(message);
+route.patch(
+	"/changeName/:id",
+	passport.authenticate("jwt", { session: false }),
+	async (req, res) => {
+		try {
+			const song = await songController.changeSongName(
+				req.params.id,
+				req.body.name,
+				req.user.dataValues.userId
+			);
+			res.status(202).json(song);
+		} catch (e) {
+			const message = (e as Error).message;
+			res.status(400).json(message);
+		}
 	}
-});
+);

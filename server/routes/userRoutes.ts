@@ -36,21 +36,12 @@ route.get("/", async (req, res) => {
 // Get user by id
 route.get("/:id", async (req, res) => {
 	try {
-		const user = await userController.getUserById(req.params.id);
+		const user = await userController.getUserById(Number(req.params.id));
 		res.status(200).json(user);
 	} catch (e) {
 		res.status(400).json(e);
 	}
 });
-
-// route.get("/songs/", async (req, res) => {
-// 	try {
-// 		const user = await userController.getUserById(req.params.id);
-// 		res.status(200).json(user);
-// 	} catch (e) {
-// 		res.status(400).json(e);
-// 	}
-// });
 
 // Create user
 route.post("/", upload.single("profilePicture"), async (req, res) => {
@@ -70,25 +61,35 @@ route.post("/", upload.single("profilePicture"), async (req, res) => {
 });
 
 // Change profile
-// route.put("/:id", async (req, res) => {
-// 	try {
-// 		// If the current user isn't with this id exit
-
-// 	} catch (e) {
-// 		let message = (e as Error).message;
-// 		res.status(400).json(message);
-// 	}
-// });
+route.put(
+	"/",
+	passport.authenticate("jwt", { session: false }),
+	async (req, res) => {
+		try {
+			const { username, email } = req.body;
+			const changedUser = await userController.changeUser(
+				req.user.dataValues.userId,
+				username,
+				email
+			);
+			res.status(202).json(changedUser);
+		} catch (e) {
+			let message = (e as Error).message;
+			res.status(400).json(message);
+		}
+	}
+);
 
 // Change PFP
 route.patch(
 	"/changeProfilePicture/",
 	upload.single("profilePicture"),
+	passport.authenticate("jwt", { session: false }),
 	async (req, res) => {
 		try {
 			const user = await userController.changePicture(
 				req.file?.filename || "",
-				"1"
+				req.user.dataValues.userId
 			);
 			res.status(202).json(user);
 		} catch (e) {
@@ -99,7 +100,7 @@ route.patch(
 );
 
 // Reset password request
-// route.patch("/resetPassword/:id", async (req, res) => {
+// route.patch("/resetPasswordRequest", async (req, res) => {
 // 	try {
 // 		const { password } = req.body;
 // 		const user = await userController.changePassword(req.params.id, password);
@@ -111,21 +112,28 @@ route.patch(
 // });
 
 // Change password
-route.patch("/changePassword/:id", async (req, res) => {
-	try {
-		const { password } = req.body;
-		const user = await userController.changePassword(req.params.id, password);
-		res.status(202).json(user);
-	} catch (e) {
-		let message = (e as Error).message;
-		res.status(400).json(message);
+route.patch(
+	"/changePassword/",
+	passport.authenticate("jwt", { session: false }),
+	async (req, res) => {
+		try {
+			const { password } = req.body;
+			const user = await userController.changePassword(
+				req.user.dataValues.userId,
+				password
+			);
+			res.status(202).json(user);
+		} catch (e) {
+			let message = (e as Error).message;
+			res.status(400).json(message);
+		}
 	}
-});
+);
 
 // Make user an author
 route.patch("/makeAuthor/:id", async (req, res) => {
 	try {
-		const user = await userController.makeAuthor(req.params.id);
+		const user = await userController.makeAuthor(Number(req.params.id));
 		res.status(202).json(user);
 	} catch (e) {
 		let message = (e as Error).message;
@@ -139,11 +147,13 @@ route.patch(
 	passport.authenticate("jwt", { session: false }),
 	async (req, res) => {
 		try {
-			console.log(req.user);
-			if (req.params.id === req.user) {
+			if (req.params.id === req.user.dataValues.userId.toString()) {
 				res.status(404).json("You cannot follow yourself");
 			}
-			const user = await userController.followUser("1", req.params.id);
+			const user = await userController.followUser(
+				req.user.dataValues.userId,
+				Number(req.params.id)
+			);
 			res.status(202).json(user);
 		} catch (e) {
 			let message = (e as Error).message;
