@@ -18,6 +18,10 @@ const playlist = db.define(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
+		image: {
+			type: DataTypes.STRING,
+			defaultValue: "default.jpg",
+		},
 	},
 	{
 		freezeTableName: true,

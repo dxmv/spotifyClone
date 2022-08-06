@@ -18,6 +18,13 @@ export const songImageStorage = multer.diskStorage({
 	filename: filename,
 });
 
+export const playlistImageStorage = multer.diskStorage({
+	destination: (req, file, callback) => {
+		callback(null, "./static/playlistImages/");
+	},
+	filename: filename,
+});
+
 export const songStorage = multer.diskStorage({
 	destination: (req, file, callback) => {
 		callback(null, "./static/songs/");

@@ -1,7 +1,7 @@
 import { Model } from "sequelize";
 import user, { follow, favoritePlaylists, favoriteSongs } from "../models/user";
 import bcrypt from "bcrypt";
-import fsPromises from "fs/promises";
+import deleteImage from "../utils/deleteImage";
 
 const validEmail = (email: string): boolean => {
 	// If it has '@'
@@ -111,13 +111,8 @@ const followUser = async (first: number, second: number) => {
 };
 
 const changePicture = async (filename: string, userId: number) => {
-	const deleteImage = async (oldImage: string) => {
-		const path = `D:\\JAVA SCRIPT PROJECTS\\Spotify Clone\\server\\static\\users\\${oldImage}`;
-		await fsPromises.unlink(path);
-	};
-
 	const current = await getUserById(userId);
-	deleteImage(current?.getDataValue("profilePicture"));
+	deleteImage(current?.getDataValue("profilePicture"), "users");
 	current?.setAttributes({ profilePicture: filename });
 	await current?.save();
 	return current;

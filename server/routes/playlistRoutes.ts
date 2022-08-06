@@ -1,8 +1,28 @@
 import { Router } from "express";
 import passport from "passport";
 import playlistController from "../controllers/playlistController";
+import multer from "multer";
 
 export const route = Router();
+
+import { playlistImageStorage } from "../utils/multerStorage";
+
+const upload = multer({
+	storage: playlistImageStorage,
+	fileFilter: (req, file, callback) => {
+		if (
+			file.mimetype === "image/jpeg" ||
+			file.mimetype === "image/png" ||
+			file.mimetype === "image/jpg"
+		) {
+			callback(null, true);
+		}
+		callback(null, false);
+	},
+	limits: {
+		fileSize: 1024 * 1024 * 5,
+	},
+});
 
 // Get all playlists
 route.get("/", async (req, res) => {
@@ -29,13 +49,35 @@ route.get("/:id", async (req, res) => {
 // Create playlist
 route.post(
 	"/",
+	upload.single("playlistImage"),
 	passport.authenticate("jwt", { session: false }),
 	async (req, res) => {
 		try {
 			const playlist = await playlistController.createPlaylist(
 				req.body.name,
 				req.body.description,
-				req.user.dataValues.userId
+				req.user.dataValues.userId,
+				req.file?.filename
+			);
+			res.status(200).json(playlist);
+		} catch (e) {
+			const message = (e as Error).message;
+			res.status(400).json(message);
+		}
+	}
+);
+
+// Change playlist image
+route.patch(
+	"/changePlaylistImage/:id",
+	upload.single("playlistImage"),
+	passport.authenticate("jwt", { session: false }),
+	async (req, res) => {
+		try {
+			const playlist = await playlistController.changePlaylistImage(
+				Number(req.params.id),
+				req.user.dataValues.userId,
+				req.file?.filename || "default.jpg"
 			);
 			res.status(200).json(playlist);
 		} catch (e) {
