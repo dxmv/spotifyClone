@@ -1,4 +1,4 @@
-import user, { follow, favoritePlaylists } from "./user";
+import user, { follow, favoritePlaylists, favoriteSongs } from "./user";
 import song from "./song";
 import playlist, { playlistSongs } from "./playlist";
 
@@ -24,6 +24,18 @@ const relations = () => {
 		as: "favoriteBy",
 		through: favoritePlaylists,
 		foreignKey: "playlistId",
+	});
+
+	// User favorite songs
+	user.belongsToMany(song, {
+		as: "favoriteSongs",
+		through: favoriteSongs,
+		foreignKey: "userId",
+	});
+	song.belongsToMany(user, {
+		as: "likes",
+		through: favoriteSongs,
+		foreignKey: "songId",
 	});
 
 	// Following

@@ -197,3 +197,39 @@ route.patch(
 		}
 	}
 );
+
+// Like a song
+route.patch(
+	"/likeSong/:id",
+	passport.authenticate("jwt", { session: false }),
+	async (req, res) => {
+		try {
+			const user = await userController.likeSong(
+				req.user.dataValues.userId,
+				Number(req.params.id)
+			);
+			res.status(202).json(user);
+		} catch (e) {
+			const msg = (e as Error).message;
+			res.status(400).json({ msg: msg });
+		}
+	}
+);
+
+// Unlike a song
+route.patch(
+	"/dislikeSong/:id",
+	passport.authenticate("jwt", { session: false }),
+	async (req, res) => {
+		try {
+			const user = await userController.dislikeSong(
+				req.user.dataValues.userId,
+				Number(req.params.id)
+			);
+			res.status(202).json(user);
+		} catch (e) {
+			const msg = (e as Error).message;
+			res.status(400).json({ msg: msg });
+		}
+	}
+);

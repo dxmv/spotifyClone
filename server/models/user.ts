@@ -46,4 +46,9 @@ export const favoritePlaylists = db.define(
 	{ timestamps: false }
 );
 
+export const favoriteSongs = db.define(
+	"FavoriteSongs",
+	{},
+	{ timestamps: false }
+);
 export default user;

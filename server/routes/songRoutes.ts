@@ -5,6 +5,7 @@ import { songImageStorage, songStorage } from "../utils/multerStorage";
 import passport from "passport";
 
 export const route = Router();
+
 const uploadImage = multer({
 	storage: songImageStorage,
 	fileFilter: (req, file, callback) => {

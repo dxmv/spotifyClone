@@ -9,12 +9,15 @@ route.post("/login", async (req, res) => {
 	try {
 		const { username, password } = req.body;
 		const currentUser = await user.findOne({ where: { username: username } });
+
+		// User with given username doesn't exist or the password isn't correct
 		if (
 			!currentUser ||
 			!(await bcrypt.compare(password, currentUser?.getDataValue("password")))
 		) {
 			res.status(402).json({ msg: `Username or password invalid` });
 		}
+
 		const token = jwt.sign(
 			{ id: currentUser?.getDataValue("userId"), username: username },
 			process.env.JWT_SECRET || "secret",

@@ -1,5 +1,5 @@
 import { Model } from "sequelize";
-import user, { follow, favoritePlaylists } from "../models/user";
+import user, { follow, favoritePlaylists, favoriteSongs } from "../models/user";
 import bcrypt from "bcrypt";
 import fsPromises from "fs/promises";
 
@@ -34,6 +34,7 @@ const getAllUsers = async (): Promise<Model<any, any>[]> =>
 			"following",
 			"createdPlaylists",
 			"favoritePlaylists",
+			"favoriteSongs",
 		],
 	});
 
@@ -47,6 +48,7 @@ const getUserById = async (
 			"following",
 			"createdPlaylists",
 			"favoritePlaylists",
+			"favoriteSongs",
 		],
 	});
 
@@ -133,14 +135,24 @@ const changeUser = async (id: number, username: string, email: string) => {
 };
 
 const addFavoritePlaylist = async (userId: number, playlistId: number) => {
-	favoritePlaylists.create({ userId: userId, playlistId: playlistId });
+	await favoritePlaylists.create({ userId: userId, playlistId: playlistId });
 	return await getUserById(userId);
 };
 
 const removeFavoritePlaylist = async (userId: number, playlistId: number) => {
-	favoritePlaylists.destroy({
+	await favoritePlaylists.destroy({
 		where: { userId: userId, playlistId: playlistId },
 	});
+	return await getUserById(userId);
+};
+
+const likeSong = async (userId: number, songId: number) => {
+	await favoriteSongs.create({ userId: userId, songId: songId });
+	return await getUserById(userId);
+};
+
+const dislikeSong = async (userId: number, songId: number) => {
+	await favoriteSongs.destroy({ where: { userId: userId, songId: songId } });
 	return await getUserById(userId);
 };
 
@@ -155,4 +167,6 @@ export default {
 	changeUser,
 	addFavoritePlaylist,
 	removeFavoritePlaylist,
+	likeSong,
+	dislikeSong,
 };

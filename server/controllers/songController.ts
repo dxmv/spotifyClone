@@ -49,10 +49,11 @@ const changeSongName = async (
 	return newSong;
 };
 
-const getAllSongs = async () => await song.findAll({ include: ["user"] });
+const getAllSongs = async () =>
+	await song.findAll({ include: ["user", "likes"] });
 
 const getSongById = async (songId: string | undefined) =>
-	await song.findByPk(songId, { include: ["user"] });
+	await song.findByPk(songId, { include: ["user", "likes"] });
 
 export default {
 	createSong,
