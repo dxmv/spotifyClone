@@ -110,6 +110,11 @@ const followUser = async (first: number, second: number) => {
 	return await getUserById(first);
 };
 
+const unfollowUser = async (first: number, second: number) => {
+	follow.destroy({ where: { followedById: second, followingId: first } });
+	return await getUserById(first);
+};
+
 const changePicture = async (filename: string, userId: number) => {
 	const current = await getUserById(userId);
 	deleteImage(current?.getDataValue("profilePicture"), "users");
@@ -164,4 +169,5 @@ export default {
 	removeFavoritePlaylist,
 	likeSong,
 	dislikeSong,
+	unfollowUser,
 };

@@ -88,9 +88,12 @@ route.patch(
 );
 
 // Add songs to playlist
-route.patch("/:id", async (req, res) => {
+route.patch("/addSong/:id", async (req, res) => {
 	try {
-		const playlist = await playlistController.addSong("1", req.params.id);
+		const playlist = await playlistController.addSong(
+			req.body.playlistId,
+			req.params.id
+		);
 		res.status(200).json(playlist);
 	} catch (e) {
 		const message = (e as Error).message;
@@ -101,7 +104,10 @@ route.patch("/:id", async (req, res) => {
 // Remove song from playlist
 route.patch("/removeSong/:id", async (req, res) => {
 	try {
-		const playlist = await playlistController.removeSong("1", req.params.id);
+		const playlist = await playlistController.removeSong(
+			req.body.playlistId,
+			req.params.id
+		);
 		res.status(200).json(playlist);
 	} catch (e) {
 		const message = (e as Error).message;

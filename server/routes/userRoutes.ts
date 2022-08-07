@@ -162,6 +162,27 @@ route.patch(
 	}
 );
 
+// Unfollow another user
+route.patch(
+	"/unfollow/:id",
+	passport.authenticate("jwt", { session: false }),
+	async (req, res) => {
+		try {
+			if (req.params.id === req.user.dataValues.userId.toString()) {
+				res.status(404).json("You cannot follow yourself");
+			}
+			const user = await userController.unfollowUser(
+				req.user.dataValues.userId,
+				Number(req.params.id)
+			);
+			res.status(202).json(user);
+		} catch (e) {
+			let message = (e as Error).message;
+			res.status(400).json(message);
+		}
+	}
+);
+
 // Add favorite playlist
 route.patch(
 	"/addFavoritePlaylist/:id",
