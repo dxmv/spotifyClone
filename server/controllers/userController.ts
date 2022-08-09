@@ -1,7 +1,9 @@
 import { Model } from "sequelize";
 import user, { follow, favoritePlaylists, favoriteSongs } from "../models/user";
 import bcrypt from "bcrypt";
+import notificationController from "../controllers/notificationController";
 import deleteImage from "../utils/deleteImage";
+import playlistController from "./playlistController";
 
 const validEmail = (email: string): boolean => {
 	// If it has '@'
@@ -35,6 +37,7 @@ const getAllUsers = async (): Promise<Model<any, any>[]> =>
 			"createdPlaylists",
 			"favoritePlaylists",
 			"favoriteSongs",
+			"notis",
 		],
 	});
 
@@ -49,6 +52,7 @@ const getUserById = async (
 			"createdPlaylists",
 			"favoritePlaylists",
 			"favoriteSongs",
+			"notis",
 		],
 	});
 
@@ -106,12 +110,17 @@ const makeAuthor = async (id: number) => {
 };
 
 const followUser = async (first: number, second: number) => {
-	follow.create({ followedById: second, followingId: first });
-	return await getUserById(first);
+	await follow.create({ followedById: second, followingId: first });
+	const firstUser = await getUserById(first);
+	await notificationController.addNotification(
+		`Followed by ${firstUser?.getDataValue("username")}`,
+		second
+	);
+	return firstUser;
 };
 
 const unfollowUser = async (first: number, second: number) => {
-	follow.destroy({ where: { followedById: second, followingId: first } });
+	await follow.destroy({ where: { followedById: second, followingId: first } });
 	return await getUserById(first);
 };
 
@@ -136,6 +145,16 @@ const changeUser = async (id: number, username: string, email: string) => {
 
 const addFavoritePlaylist = async (userId: number, playlistId: number) => {
 	await favoritePlaylists.create({ userId: userId, playlistId: playlistId });
+	const playlist = await playlistController.getPlaylistById(
+		playlistId.toString()
+	);
+	const current = await getUserById(userId);
+	if (current?.getDataValue("userId") != playlist?.getDataValue("creatorId")) {
+		await notificationController.addNotification(
+			`Playlist liked by ${current?.getDataValue("username")}`,
+			playlist?.getDataValue("creatorId")
+		);
+	}
 	return await getUserById(userId);
 };
 

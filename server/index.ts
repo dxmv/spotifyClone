@@ -7,6 +7,7 @@ import { route as userRoute } from "./routes/userRoutes";
 import { route as songRoute } from "./routes/songRoutes";
 import { route as playlistRoute } from "./routes/playlistRoutes";
 import { route as authRoute } from "./routes/authorizationRoutes";
+import { route as notiRoute } from "./routes/notificationRoutes";
 
 import db from "./utils/connection";
 import relations from "./models/relations";
@@ -40,6 +41,7 @@ app.use("/auth", authRoute);
 app.use("/users", userRoute);
 app.use("/songs", songRoute);
 app.use("/playlists", playlistRoute);
+app.use("/notifications", notiRoute);
 
 // Listen
 app.listen(port, () => {

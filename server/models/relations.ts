@@ -1,6 +1,7 @@
 import user, { follow, favoritePlaylists, favoriteSongs } from "./user";
 import song from "./song";
 import playlist, { playlistSongs } from "./playlist";
+import notification from "./notification";
 
 const relations = () => {
 	// User created songs
@@ -25,6 +26,10 @@ const relations = () => {
 		through: favoritePlaylists,
 		foreignKey: "playlistId",
 	});
+
+	// Notifications for user
+	user.hasMany(notification, { foreignKey: "userId", as: "notis" });
+	notification.belongsTo(user, { foreignKey: "userId", as: "user" });
 
 	// User favorite songs
 	user.belongsToMany(song, {
