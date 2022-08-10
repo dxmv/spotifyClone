@@ -1,9 +1,10 @@
 nav {
 	background-color: black;
 	max-width: 10%;
-	height: 800px;
+	height: 90vh;
 	padding: 50px 20px;
 	color: white;
+	border-right: 1px solid #777;
 }
 
 ul {

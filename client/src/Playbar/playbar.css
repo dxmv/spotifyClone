@@ -1,0 +1,97 @@
+footer {
+	width: 100%;
+	background-color: #333;
+	border-top: 3px solid #777;
+	height: 10vh;
+	display: flex;
+	justify-content: space-between;
+	padding: 10px 20px;
+	align-items: center;
+}
+
+.song-image {
+	width: 60px;
+	transition: 0.2s;
+	cursor: pointer;
+	height: 100%;
+}
+
+.song-image:hover {
+	border: 2px solid white;
+	transition: 0.2s;
+}
+
+.song-info {
+	display: flex;
+	align-items: center;
+}
+
+.song-info div {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
+	margin-left: 10px;
+}
+
+#song-name {
+	color: white;
+	font-weight: 600;
+}
+
+#song-artist {
+	color: #777;
+}
+
+.volume-level {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.slider {
+	-webkit-appearance: none;
+	width: 100px;
+	height: 5px;
+	background: #777;
+	outline: none;
+	opacity: 0.8;
+	transition: opacity 0.2s;
+	overflow: visible;
+	border-radius: 10px;
+	margin-left: 10px;
+}
+
+.slider:hover {
+	opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 10px;
+	height: 10px;
+	background: white;
+	cursor: pointer;
+	border-radius: 50%;
+}
+
+.slider::-webkit-scrollbar-track {
+	background: white;
+}
+
+#song-slider {
+	overflow: visible;
+	width: 600px;
+	margin: 0 10px;
+}
+
+.time-text {
+	color: white;
+	width: 40px;
+}
+
+.song-button:hover {
+	cursor: pointer;
+	opacity: 0.7;
+}
