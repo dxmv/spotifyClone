@@ -1,10 +1,10 @@
 nav {
-	background-color: black;
-	max-width: 10%;
+	background-color: #0b090a;
+	width: 12%;
 	height: 90vh;
 	padding: 50px 20px;
 	color: white;
-	border-right: 1px solid #777;
+	border-right: 1px solid #ffffff;
 }
 
 ul {
@@ -42,14 +42,20 @@ ul {
 	text-align: left;
 	font-weight: 500;
 	margin-bottom: 10px;
+	color: #d3d3d3;
 }
 
-li:hover {
-	color: red;
-	transition: 0.5s;
+#playlists-list li:hover {
+	color: white;
 	cursor: pointer;
 }
 
-li {
-	transition: 0.5s;
+#main-nav li:hover {
+	color: #e5383b;
+	transition: 0.25s;
+	cursor: pointer;
+}
+
+#main-nav li {
+	transition: 0.25s;
 }

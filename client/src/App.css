@@ -1,0 +1,23 @@
+* {
+	font-family: "Work Sans", sans-serif;
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+
+::-webkit-scrollbar {
+	width: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background-color: #0b090a;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #b1a7a6;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-color: #d3d3d3;
+}

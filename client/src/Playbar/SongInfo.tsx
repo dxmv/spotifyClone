@@ -2,17 +2,21 @@ import React from "react";
 
 // Name of song,picture and author
 
-export default function SongInfo() {
+export default function SongInfo({
+	songName,
+	artistName,
+	songImage,
+}: {
+	songName: string;
+	artistName: string;
+	songImage: string;
+}) {
 	return (
 		<div className="song-info">
-			<img
-				className="song-image"
-				src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQE4kqM739Si8UAuTrZO0ctdhMMbcBKyE-cA&usqp=CAU"
-				alt="Song"
-			/>
+			<img className="song-image" src={songImage} alt="Song" />
 			<div>
-				<span id="song-name">Top G</span>
-				<span id="song-artist">Andrew Tate</span>
+				<span id="song-name">{songName}</span>
+				<span id="song-artist">{artistName}</span>
 			</div>
 		</div>
 	);
