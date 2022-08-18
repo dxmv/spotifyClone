@@ -1,0 +1,30 @@
+#library {
+	background: #161a1d;
+	background: linear-gradient(180deg, #161a1d 0%, #0b090a 50%);
+	width: 100%;
+	overflow-y: scroll;
+	padding: 20px;
+}
+
+#library-filter ul {
+	list-style: none;
+	color: #ffffff;
+	display: flex;
+}
+
+#library-filter ul li {
+	margin-right: 20px;
+	font-weight: 600;
+	padding: 10px 5px;
+	width: 80px;
+	text-align: center;
+	cursor: pointer;
+}
+
+#library-filter ul li:hover {
+	opacity: 0.8;
+}
+
+.active {
+	background-color: #a4161a;
+}
