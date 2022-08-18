@@ -1,5 +1,5 @@
 import React from "react";
-import List from "../Reusable Components/List/List";
+import List from "../../components/List/List";
 import "./home.css";
 import HomeUser from "./HomeUser";
 

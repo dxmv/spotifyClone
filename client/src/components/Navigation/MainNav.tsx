@@ -1,21 +1,22 @@
 import React from "react";
 import { AiFillHome, AiOutlineSearch } from "react-icons/ai";
 import { BiLibrary } from "react-icons/bi";
+import { Link } from "react-router-dom";
 
 export default function MainNav() {
 	return (
 		<ul id="main-nav">
 			<li>
 				<AiFillHome />
-				<span>Home</span>
+				<Link to={"/"}>Home</Link>
 			</li>
 			<li>
 				<AiOutlineSearch />
-				<span>Search</span>
+				<Link to={"/search"}>Search</Link>
 			</li>
 			<li>
 				<BiLibrary />
-				<span>Library</span>
+				<Link to={"/library"}>Library</Link>
 			</li>
 		</ul>
 	);

@@ -9,7 +9,7 @@ export default function UserInfo() {
 			<img src={PICTURE} alt="Pfp" id="user-pfp" />
 			<div id="user-text">
 				<span className="lean-text">PROFILE</span>
-				<h1 id="username">Dima</h1>
+				<h1 id="user-username">Dima</h1>
 				<div>
 					<span className="lean-text" style={{ marginRight: "10px" }}>
 						1 Follower

@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import DropDownMenu from "../Reusable Components/DropDownMenu/DropDownMenu";
-import { DropDownItem } from "../types";
+import DropDownMenu from "../../components/DropDownMenu/DropDownMenu";
+import { DropDownItem } from "../../types";
 import { IoPersonOutline, IoSettingsOutline, IoExit } from "react-icons/io5";
 
 const DropDown: DropDownItem[] = [
@@ -21,7 +21,6 @@ const DropDown: DropDownItem[] = [
 
 export default function HomeUser() {
 	const [open, setOpen] = useState<boolean>(false);
-	const arrowRef = useRef();
 
 	const handleOpen = async () => {
 		await setOpen(prev => !prev);
@@ -31,7 +30,9 @@ export default function HomeUser() {
 		<div className="justify-box" style={{ overflow: "visible" }}>
 			<h1 style={{ fontWeight: "700" }}>Welcome</h1>
 			<div id="user" onClick={handleOpen}>
-				<span id="username">Dima</span>
+				<span id="username" style={{ fontSize: "24px" }}>
+					Dima
+				</span>
 				<MdKeyboardArrowDown size={24} color="white" />
 				{open && <DropDownMenu menu={DropDown} />}
 			</div>
